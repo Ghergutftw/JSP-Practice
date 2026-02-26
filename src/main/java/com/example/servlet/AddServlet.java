@@ -2,9 +2,7 @@ package com.example.servlet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -15,6 +13,8 @@ public class AddServlet extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         int num1 = Integer.parseInt(req.getParameter("firstNumber"));
         int num2 = Integer.parseInt(req.getParameter("secondNumber"));
+        int num3 =10;
+        int num4 = num3 * num3;
 
         int sum = num1 + num2;
 
@@ -23,9 +23,24 @@ public class AddServlet extends HttpServlet {
 
         req.setAttribute("sum", sum);
 
-        RequestDispatcher rd = req.getRequestDispatcher("sqr" );
-        rd.forward(req,res);
+        //HTTP Session sharing
+        HttpSession session = req.getSession();
+        session.setAttribute("num3" , num3);
 
+        //Cookie
+        Cookie cookie = new Cookie("num4", num4 + "");
+        //Se adauga la respons deoarece sendRedirect, trimite un mesaj la clientul cu faptul
+        //ca trebuie sa faca un request spre /sqr, cu acelasi req si res
+        res.addCookie(cookie);
+
+        //URL Rewriting
+        //res.sendRedirect("sqr"+"?firstNumber=" + num1 + "&secondNumber=" + num2);
+
+//      Go to SQR , si mai fa un request la fel
+//        RequestDispatcher rd = req.getRequestDispatcher("sqr" );
+//        rd.forward(req,res);
+
+        res.sendRedirect("sqr");
     }
 
 //    @GetRequest
@@ -33,6 +48,10 @@ public class AddServlet extends HttpServlet {
 
         PrintWriter out = res.getWriter();
         out.println("This is a get Method");
+
+        req.setAttribute("sum", 10);
+
+        res.sendRedirect("sqr");
     }
 
 }
