@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 @WebServlet("/third")
 public class ThirdServlet extends HttpServlet {
 
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int k = 0;
